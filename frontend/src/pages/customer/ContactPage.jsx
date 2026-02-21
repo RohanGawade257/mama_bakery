@@ -10,13 +10,13 @@ const ContactPage = () => (
         </p>
         <div className="mt-5 space-y-3 text-[#5f554e]">
           <p>
-            <span className="font-semibold">Phone:</span> +91 98765 43210
+            <span className="font-semibold">Phone:</span> +91 90000 40000
           </p>
           <p>
             <span className="font-semibold">Email:</span> hello@mama-bakery.com
           </p>
           <p>
-            <span className="font-semibold">Address:</span> Panaji, Goa
+            <span className="font-semibold">Address:</span> Honda, Goa
           </p>
         </div>
       </div>
