@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Serif+Display&display=swap");
+@import "tailwindcss";
+
+:root {
+  --bg: #fff8f2;
+  --surface: #ffffff;
+  --border: #f2ddcc;
+  --text: #3f352d;
+  --muted: #6e625a;
+  --accent: #e76000;
+  --accent-2: #ff9a4d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Manrope", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 10% 0%, rgba(231, 96, 0, 0.16), transparent 28%),
+    radial-gradient(circle at 90% 0%, rgba(255, 154, 77, 0.12), transparent 32%),
+    var(--bg);
+}
+
+h1,
+h2,
+h3 {
+  font-family: "DM Serif Display", serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.shell {
+  width: min(1180px, 94%);
+  margin-inline: auto;
+}
+
+.panel-card {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 18px;
+  box-shadow:
+    0 10px 28px rgba(231, 96, 0, 0.1),
+    0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.btn-primary {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.65rem 1.1rem;
+  background: linear-gradient(120deg, var(--accent), var(--accent-2));
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  border: 1px solid #f0c8a6;
+  border-radius: 999px;
+  padding: 0.62rem 1.1rem;
+  background: #fff;
+  color: var(--accent);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  border: 1px solid #efcfb6;
+  border-radius: 12px;
+  background: #fff;
+  padding: 0.65rem 0.85rem;
+  outline: none;
+  color: var(--text);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: #e76000;
+  box-shadow: 0 0 0 3px rgba(231, 96, 0, 0.13);
+}
+
+.page-title {
+  margin: 0;
+  font-size: clamp(1.75rem, 2.8vw, 2.4rem);
+  line-height: 1.1;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.62rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
