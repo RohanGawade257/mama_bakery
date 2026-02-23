@@ -5,11 +5,12 @@ import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
 import { formatINR } from "../../utils/currency.js";
 import { useProducts } from "../../context/ProductContext.jsx";
 import { useCart } from "../../context/CartContext.jsx";
+import { showToast } from "../../components/ui/ToastHost.jsx";
 
 const ProductDetailsPage = () => {
   const { id } = useParams();
   const { activeProduct, fetchProductById, clearActiveProduct, loading, error } = useProducts();
-  const { addToCart } = useCart();
+  const { addToCart, items } = useCart();
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
@@ -18,6 +19,15 @@ const ProductDetailsPage = () => {
   }, [clearActiveProduct, fetchProductById, id]);
 
   const maxQuantity = useMemo(() => Math.max(Number(activeProduct?.stock) || 0, 0), [activeProduct]);
+  const isInCart = useMemo(
+    () => items.some((item) => item._id === activeProduct?._id),
+    [items, activeProduct?._id]
+  );
+
+  const handleAddToCart = () => {
+    addToCart(activeProduct, quantity);
+    showToast("Product added to cart");
+  };
 
   if (loading) {
     return (
@@ -79,11 +89,11 @@ const ProductDetailsPage = () => {
               </div>
               <button
                 type="button"
-                className="flame-button mt-5"
-                onClick={() => addToCart(activeProduct, quantity)}
+                className={`flame-button mt-5 ${isInCart ? "is-added" : ""}`}
+                onClick={handleAddToCart}
                 disabled={maxQuantity <= 0}
               >
-                {maxQuantity <= 0 ? "Out of Stock" : "Add to Cart"}
+                {isInCart ? "Added \u2713" : maxQuantity <= 0 ? "Out of Stock" : "Add to Cart"}
               </button>
               <Link to="/cart" className="outline-button mt-5">
                 Go to Cart
@@ -97,4 +107,3 @@ const ProductDetailsPage = () => {
 };
 
 export default ProductDetailsPage;
-

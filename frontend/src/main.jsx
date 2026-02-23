@@ -7,6 +7,7 @@ import { AuthProvider } from "./context/AuthContext.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import { ProductProvider } from "./context/ProductContext.jsx";
 import { OrderProvider } from "./context/OrderContext.jsx";
+import ToastHost from "./components/ui/ToastHost.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           <CartProvider>
             <OrderProvider>
               <App />
+              <ToastHost />
             </OrderProvider>
           </CartProvider>
         </ProductProvider>

@@ -2,9 +2,16 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useCart } from "../../context/CartContext.jsx";
 import { formatINR } from "../../utils/currency.js";
+import { showToast } from "../ui/ToastHost.jsx";
 
 const ProductCard = ({ product }) => {
-  const { addToCart } = useCart();
+  const { addToCart, items } = useCart();
+  const isInCart = items.some((item) => item._id === product._id);
+
+  const handleAddToCart = () => {
+    addToCart(product, 1);
+    showToast("Product added to cart");
+  };
 
   return (
     <motion.article
@@ -26,11 +33,11 @@ const ProductCard = ({ product }) => {
         <div className="mt-4 flex gap-2">
           <button
             type="button"
-            onClick={() => addToCart(product, 1)}
-            className="flame-button w-full"
+            onClick={handleAddToCart}
+            className={`flame-button w-full ${isInCart ? "is-added" : ""}`}
             disabled={product.stock <= 0}
           >
-            {product.stock <= 0 ? "Out of Stock" : "Add to Cart"}
+            {isInCart ? "Added \u2713" : product.stock <= 0 ? "Out of Stock" : "Add to Cart"}
           </button>
           <Link to={`/product/${product._id}`} className="outline-button flex items-center justify-center">
             View
