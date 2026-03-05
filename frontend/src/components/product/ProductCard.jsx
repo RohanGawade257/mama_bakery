@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useCart } from "../../context/CartContext.jsx";
@@ -5,11 +6,28 @@ import { formatINR } from "../../utils/currency.js";
 import { showToast } from "../ui/ToastHost.jsx";
 
 const ProductCard = ({ product }) => {
-  const { addToCart, items } = useCart();
-  const isInCart = items.some((item) => item._id === product._id);
+  const { addToCart } = useCart();
+  const [justAdded, setJustAdded] = useState(false);
+  const addedTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (addedTimerRef.current) {
+        clearTimeout(addedTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleAddToCart = () => {
     addToCart(product, 1);
+    setJustAdded(true);
+    if (addedTimerRef.current) {
+      clearTimeout(addedTimerRef.current);
+    }
+    addedTimerRef.current = setTimeout(() => {
+      setJustAdded(false);
+      addedTimerRef.current = null;
+    }, 2000);
     showToast("Product added to cart");
   };
 
@@ -34,10 +52,10 @@ const ProductCard = ({ product }) => {
           <button
             type="button"
             onClick={handleAddToCart}
-            className={`flame-button w-full ${isInCart ? "is-added" : ""}`}
+            className={`flame-button w-full ${justAdded ? "is-added" : ""}`}
             disabled={product.stock <= 0}
           >
-            {isInCart ? "Added \u2713" : product.stock <= 0 ? "Out of Stock" : "Add to Cart"}
+            {justAdded ? "Added \u2713" : product.stock <= 0 ? "Out of Stock" : "Add to Cart"}
           </button>
           <Link to={`/product/${product._id}`} className="outline-button flex items-center justify-center">
             View

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import PageContainer from "../../components/layout/PageContainer.jsx";
 import LoadingSpinner from "../../components/ui/LoadingSpinner.jsx";
@@ -10,22 +10,36 @@ import { showToast } from "../../components/ui/ToastHost.jsx";
 const ProductDetailsPage = () => {
   const { id } = useParams();
   const { activeProduct, fetchProductById, clearActiveProduct, loading, error } = useProducts();
-  const { addToCart, items } = useCart();
+  const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
+  const [justAdded, setJustAdded] = useState(false);
+  const addedTimerRef = useRef(null);
 
   useEffect(() => {
     fetchProductById(id);
     return () => clearActiveProduct();
   }, [clearActiveProduct, fetchProductById, id]);
 
+  useEffect(() => {
+    return () => {
+      if (addedTimerRef.current) {
+        clearTimeout(addedTimerRef.current);
+      }
+    };
+  }, []);
+
   const maxQuantity = useMemo(() => Math.max(Number(activeProduct?.stock) || 0, 0), [activeProduct]);
-  const isInCart = useMemo(
-    () => items.some((item) => item._id === activeProduct?._id),
-    [items, activeProduct?._id]
-  );
 
   const handleAddToCart = () => {
     addToCart(activeProduct, quantity);
+    setJustAdded(true);
+    if (addedTimerRef.current) {
+      clearTimeout(addedTimerRef.current);
+    }
+    addedTimerRef.current = setTimeout(() => {
+      setJustAdded(false);
+      addedTimerRef.current = null;
+    }, 330);
     showToast("Product added to cart");
   };
 
@@ -89,11 +103,11 @@ const ProductDetailsPage = () => {
               </div>
               <button
                 type="button"
-                className={`flame-button mt-5 ${isInCart ? "is-added" : ""}`}
+                className={`flame-button mt-5 ${justAdded ? "is-added" : ""}`}
                 onClick={handleAddToCart}
                 disabled={maxQuantity <= 0}
               >
-                {isInCart ? "Added \u2713" : maxQuantity <= 0 ? "Out of Stock" : "Add to Cart"}
+                {justAdded ? "Added \u2713" : maxQuantity <= 0 ? "Out of Stock" : "Add to Cart"}
               </button>
               <Link to="/cart" className="outline-button mt-5">
                 Go to Cart
